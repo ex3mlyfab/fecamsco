@@ -142,6 +142,7 @@ Route::middleware('auth')->group(function () {
 
     });
     Route::prefix('admin')->group(function () {
+        Route::get('/members/update-email/{user}', [UserController::class, 'updateEmail'])->name('member-email.create')->can('update-member-email');
         Route::get('users', [UserController::class, 'index'])->name('all.users')->can('view-all-users');
         Route::get('user/list', [UserController::class, 'newUsers'])->name('users.list');
         Route::get('user/members/list', [UserController::class, 'member'])->name('members.list')->can('view-member');

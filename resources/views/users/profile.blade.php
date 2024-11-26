@@ -135,7 +135,7 @@
                                         <h5 class="text-secondary">Latest Contributions Details</h5>
                                         <a href="{{ route('userContribution.get', $user->id) }}" class="btn btn-sm btn-success">View all Contributions</a>
                                     </div>
-                                    <div class="cardbody m-4">
+                                    <div class="card-body m-4">
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -169,12 +169,12 @@
                                         <h5 class="text-secondary">Latest Loan Details</h5>
                                         <a href="{{route('self-loan.all', $user->id)}}" class="btn btn-sm btn-success">View all</a>
                                     </div>
-                                    <div class="cardbody m-4">
+                                    <div class="card-body m-4">
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
-                                                
+
                                                         <th>Amount</th>
                                                         <th>Status</th>
 

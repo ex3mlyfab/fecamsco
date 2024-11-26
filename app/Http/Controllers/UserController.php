@@ -50,7 +50,10 @@ class UserController extends Controller
     public function member(){
         return view('users.registered_member');
     }
-
+    public function updateEmail(User $user)
+    {
+        return view('users.change-email', compact('user'));
+    }
     public function generateFullName(){
 
         $sep = " \n\t";
@@ -78,7 +81,8 @@ class UserController extends Controller
     public function get_table_data(Request $request)
     {
 
-        $users = User::with("member")
+        $users = User::query()
+            ->with('member')
             ->select('users.*')
             ->orderBy('users.id', "desc");
 
@@ -92,9 +96,9 @@ class UserController extends Controller
                     $query->where('users.fullname_virtual', 'like', "%{$request->get('last_name')}%");
                 }
 
-                // if ($request->has('department')) {
-                //     $query->where('department', $request->get('department'));
-                // }
+                // if ($request->has('ippis')) {
+                //    $query->where('members.ippis_no', $request->get('ippis'));
+                // // }
 
                 // if ($request->has('status')) {
                 //     $query->whereIn('status', json_decode($request->get('status')));
@@ -142,6 +146,9 @@ class UserController extends Controller
                 if ($request->has('last_name')) {
                     $query->where('users.fullname_virtual', 'like', "%{$request->get('last_name')}%");
                 }
+                if ($request->has('ippis')) {
+                   $query->where('members.ippis_no', $request->get('ippis'));
+                }
             })
             ->editColumn('email', function ($user) {
 
@@ -160,7 +167,8 @@ class UserController extends Controller
                     . '&nbsp;</button>'
                     . '<div class="dropdown-menu">'
                     . '<a href="' . route('user.show', $user->user->id) . '" class="dropdown-item ajax-modal"><i class="fa fa-user"></i> ' . __('Show User') . '</a>'
-                    . '<a href="' . route('member-update.create', $user->user->id) . '" data-fullscreen="true" class="dropdown-item ajax-modal">' . __('Edit User') . '</a></div>';
+                    . '<a href="' . route('member-update.create', $user->user->id) . '" data-fullscreen="true" class="dropdown-item ajax-modal">' . __('Edit User') . '</a>'
+                    .'<a href="' . route('member-email.create', $user->user->id) . '" data-fullscreen="true" class="dropdown-item ajax-modal">' . __('Edit User Email') . '</a>'.'</div>';
             })
             ->setRowId(function ($user) {
                 return "row_" . $user->id;

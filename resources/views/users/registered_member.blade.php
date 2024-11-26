@@ -87,15 +87,20 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-3 mb-2">
-                                <label>{{ __('First Name') }}</label>
+                                <label>{{ __('Member Name') }}</label>
                                 <input type="text" class="form-control select-filter" name="last_name" id="first-name">
+                            </div>
+                            <div class="col-lg-3 mb-2">
+                                <label>{{ __('Ippis No') }}</label>
+                                <input type="text" class="form-control select-filter" name="ippis" id="ippis">
                             </div>
                         </div>
                         <div class="table-responsive">
                             <table class="display datatables" id="server-side-datatable">
                                 <thead>
                                     <tr>
-                                        <th>first Name</th>
+                                        <th>Member Name</th>
+                                        <th>IPPIS NO</th>
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>action</th>
@@ -104,7 +109,8 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>first Name</th>
+                                        <th>Member Name</th>
+                                        <th>IPPIS NO</th>
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>action</th>
@@ -158,6 +164,10 @@
                                 d.last_name = $('input[name=last_name]').val();
                             }
 
+                            if($('input[name=ippis]').val() != '') {
+                                d.ippis = $('input[name=ippis]').val();
+                            }
+
                             // if ($('select[name=client_id]').val() != '') {
                             // 	d.client_id = $('select[name=client_id]').val();
                             // }
@@ -177,6 +187,10 @@
                     "columns": [{
                             data: "member_names",
                             name: "other_names"
+                        },
+                        {
+                            data: "ippis_no",
+                            name: "ippis_no"
                         },
                         {
                             data: "email",
@@ -267,6 +281,9 @@
                     invoice_table.draw();
                 });
 
+                $('#ippis').on('keyup', function(e) {
+                    invoice_table.draw();
+                });
                 // $('.select-filter').on('change', function(e) {
                 //     invoice_table.draw();
                 // });
