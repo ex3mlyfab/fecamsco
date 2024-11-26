@@ -18,7 +18,7 @@ class ReceiveOrder extends Model
     ];
     public function productReceiveds():HasMany
     {
-        return $this->hasMany(ProductReceived::class)->latest();
+        return $this->hasMany(ProductReceived::class, 'receive_order_id')->latest();
     }
     public function receiveOrderDetails(): HasMany
     {

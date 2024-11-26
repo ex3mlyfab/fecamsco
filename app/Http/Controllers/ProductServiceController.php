@@ -103,7 +103,7 @@ class ProductServiceController extends Controller
             'cost' => $supplied_total,
             'status' => 1,
         ]);
-        
+
         $supplier_pay = SupplierPayment::create([
             'supplier_id' =>$purchaseOrder->supplier_id,
             'receive_order_id' => $receiveOrder->id,
@@ -121,6 +121,7 @@ class ProductServiceController extends Controller
                 {
 
                     $product_id =  $data['product_id'][$index];
+                    // dd($product_id);
                     $product_name = ProductService::findOrFail($product_id);
                     $receiveOrder->receiveOrderDetails()->create([
                         'product_service_id' => $product_id,
@@ -129,8 +130,8 @@ class ProductServiceController extends Controller
                         'status' =>1
                     ]);
 
-                    $receiveOrder->productReceiveds()->create([
-                        'product_service_id' => $product_id,
+                    $product_name->productReceiveds()->create([
+                        'receive_order_id' => $receiveOrder->id,
                         'quantity_received' => $data['product_qty'][$index],
                         'cost_price' => $data['cost_price'][$index],
                         'initial_qty' => $product_name->total_received,
