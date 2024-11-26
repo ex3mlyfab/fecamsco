@@ -162,7 +162,7 @@ Route::middleware('auth')->group(function () {
         Route::post('user/get_awaiting_data',[UserController::class, 'get_awaiting_data'])->name('awaiting.datatable');
         Route::post('user/get_denied_data',[UserController::class, 'get_denied_data'])->name('denied.datatable');
         Route::post('user/get_user_contribution_data/{user}',[UserController::class, 'get_user_contribution_data'])->name('userContribution.datatable');
-        Route::get('user/getMemberCOntribution/{user}',[UserController::class, 'memberContribution'])->name('userContribution.get');
+        Route::get('user/getMemberContribution/{user}',[UserController::class, 'memberContribution'])->name('userContribution.get');
         Route::post('user/get_online_data',[UserController::class, 'get_online_data'])->name('online.datatable');
         Route::get('/approve-memberhip/{user}/treat', [UserController::class, 'approveMembership'])->name('membership.approve')->can('approve-member');
         Route::get('/deny-memberhip/{user}/treat', [UserController::class, 'declineMembership'])->name('membership.decline')->can('deny-membership');

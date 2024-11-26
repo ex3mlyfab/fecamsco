@@ -14,6 +14,7 @@ class Deposit extends Model
         'amount' => MoneyCast::class,
         'initial_balance' => MoneyCast::class,
         'approval_date' => 'datetime',
+        'description' => 'date'
 
     ];
 

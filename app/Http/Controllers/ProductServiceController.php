@@ -103,6 +103,7 @@ class ProductServiceController extends Controller
             'cost' => $supplied_total,
             'status' => 1,
         ]);
+        
         $supplier_pay = SupplierPayment::create([
             'supplier_id' =>$purchaseOrder->supplier_id,
             'receive_order_id' => $receiveOrder->id,
@@ -113,7 +114,7 @@ class ProductServiceController extends Controller
             'status' => 1
 
         ]);
-        
+
         foreach($data['product_id'] as $index=>$item){
 
                 if($data['product_qty'][$index] != 0)

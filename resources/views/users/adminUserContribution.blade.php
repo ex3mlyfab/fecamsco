@@ -120,17 +120,11 @@
                             </div>
                         </div>
                          <div class="card-body">
-                        <div class="row">
-                                <div class="col-lg-3 mb-2">
-                                    <label>{{ __('First Name') }}</label>
-                                    <input type="text" class="form-control select-filter" name="last_name" id="first-name">
-                                </div>
-                            </div>
                             <div class="table-responsive">
                                 <table class="display datatables" id="server-side-datatable">
                                     <thead>
                                         <tr>
-                                            
+
                                             <th>Amount</th>
                                             <th>Deduction Period</th>
 
@@ -138,7 +132,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            
+
                                             <th>Amount</th>
                                             <th>Deduction Period</th>
                                         </tr>
@@ -209,11 +203,14 @@
                     "columns": [
                         {
                             data: "amount",
-                            name: "Deductions"
+                            name: "amount",
+
+
                         },
                         {
                             data: "period",
-                            name: "period"
+                            name: "period",
+                            className: "text-center"
                         },
 
 
@@ -221,7 +218,7 @@
                     responsive: true,
                     "bStateSave": true,
                     "bAutoWidth": false,
-                    "ordering": false,
+                    "ordering": true,
                     "searching": false,
                     dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6 text-right'l>>" +
                         "<'row'<'col-sm-12'tr>>" +
@@ -243,8 +240,8 @@
                         "paginate": {
                             "first": "first",
                             "last": "last",
-                            "previous": "<i data-feather='arrow-left'></i>",
-                            "next": "<i data-feathe='arrow-right'></i>"
+                            "previous": "<i class='fa fa-arrow-left'></i>",
+                            "next": "<i class='fa fa-arrow-right'></i>"
                         }
                     },
                     buttons: [{
@@ -252,7 +249,7 @@
                             exportOptions: {
                                 columns: [0, 1, 2]
                             },
-                            title: 'UsersDeuction',
+                            title: 'Users Deduction',
                         },
                         {
                             extend: 'copy',
@@ -277,7 +274,7 @@
                             customize: function(win) {
                                 $(win.document.body)
                                     .css('font-size', '10pt')
-                                    .prepend('<h4 class="text-center">Invoice</h4>');
+                                    .prepend('<h4 class="text-center">User Deduction</h4>');
                                 $(win.document.body).find('table')
                                     .addClass('compact')
                                     .css('font-size', 'inherit');
@@ -289,9 +286,9 @@
                     }
                 });
 
-                $('#first-name').on('keyup', function(e) {
-                    invoice_table.draw();
-                });
+                // $('#first-name').on('keyup', function(e) {
+                //     invoice_table.draw();
+                // });
 
                 // $('.select-filter').on('change', function(e) {
                 //     invoice_table.draw();
@@ -322,5 +319,4 @@
     </script>
     @endpush
 @endsection
-                        
-                
+

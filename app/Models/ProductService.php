@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ProductService extends Model
 {
@@ -25,12 +26,12 @@ class ProductService extends Model
 
     public function productReceiveds() : HasMany
     {
-        return $this->hasMany(ProductReceived::class)->latest();
+        return $this->hasMany(ProductReceived::class, 'product_service_id')->latest();
     }
 
-    public function getLastReceivedAttribute()
+    public function latestProductReceived(): HasOne
     {
-        return $this->productReceiveds->first();
+        return $this->hasOne(ProductReceived::class, 'product_service_id')->latestOfMany();
     }
 
     public function productSales(): HasMany
@@ -67,8 +68,8 @@ class ProductService extends Model
     {
         return ($this->total_received - $this->total_sales + $this->total_returns);
     }
-    public function getCurrentSellingAttribute()
+    public function latestProductPrice(): HasOne
     {
-        return $this->productPrices()->first()->current_price ?? 0;
+        return $this->hasOne(ProductPrice::class)->latestOfMany();
     }
 }

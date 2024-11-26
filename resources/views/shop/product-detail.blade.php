@@ -45,7 +45,7 @@
                     <div class="col-md-6">
                         <div class="icon bg-primary text-light"><i class="icofont icofont-list f-16 p-t-1"></i>Selling Price</div>
                         <div>
-                            <h5>{!! showAmount($product->current_selling) !!}</h5>
+                            <h5>{!! showAmount($product->latestProductPrice->current_price) !!}</h5>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -53,7 +53,7 @@
                         <div>
                             <h5></h5>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div class="card">

@@ -315,7 +315,8 @@ class UserController extends Controller
     public function get_user_contribution_data(Request $request, User $user)
     {
         //dd($this->memberContribution);
-         $users = Deposit::where('user_id', $user->id);
+         $users = Deposit::where('user_id', $user->id)
+                ->orderBy('description', 'desc');
 
 
         return DataTables::eloquent($users)
@@ -325,7 +326,7 @@ class UserController extends Controller
             })
             ->editColumn('period', function ($user) {
 
-                return date('Y-M',strtotime($user->description));
+                return $user->description->format('M-Y');
             })
             ->editColumn('serial_number', function ($user) {
                 return $user->ind +1;

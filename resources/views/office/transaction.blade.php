@@ -222,8 +222,8 @@
                         "paginate": {
                             "first": "first",
                             "last": "last",
-                            "previous": "<i data-feather='arrow-left'></i>",
-                            "next": "<i data-feathe='arrow-right'></i>"
+                            "previous": "<i class='fa fa-arrow-left'></i>",
+                            "next": "<i class='fa fa-arrow-right'></i>"
                         }
                     },
                     buttons: [{
