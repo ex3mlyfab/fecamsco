@@ -66,7 +66,7 @@ class ProductService extends Model
     }
     public function getStockQuantityAttribute()
     {
-        return ($this->total_received - $this->total_sales + $this->total_returns);
+        return ($this->getTotalReceivedAttribute() - $this->getTotalSalesAttribute() + $this->getTotalReturnsAttribute());
     }
     public function latestProductPrice(): HasOne
     {
