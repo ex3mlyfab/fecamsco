@@ -167,8 +167,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/deny-memberhip/{user}/treat', [UserController::class, 'declineMembership'])->name('membership.decline')->can('deny-membership');
     });
 });
-Route::view('default-layout', 'multiple.default-layout')->name('default-layout');
-Route::view('compact-layout', 'multiple.compact-layout')->name('compact-layout');
+Route::get('/rundown', [UserController::class, 'generateFullName'])->name('rundown');
 Route::view('modern-layout', 'multiple.modern-layout')->name('modern-layout');
 
 Auth::routes();

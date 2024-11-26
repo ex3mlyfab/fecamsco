@@ -7,7 +7,7 @@
 
 @endpush
 @section('content')
-    
+
     <div class="container-fluid dashboard-default-sec">
         <div class="row">
             <div class="col-md-12">
@@ -17,7 +17,7 @@
                         <div class="d-flex flex-column">
                             <a href="{{route('product.create')}}" class="btn btn-sm btn-light"><i class="fa fa-plus-square"></i> Create New Product </a>
                             <a href="{{route('purchase-order.ceate')}}" class="btn btn-sm btn-secondary"><i class="fa fa-pencil-square"></i> Make Purchase Order</a>
-                            <a href="#" class="btn btn-sm btn-success"><i class="fa fa-share-square"></i> Receive Purchase Order</a>
+                            <a href="{{route('receive-order.all')}}" class="btn btn-sm btn-success"><i class="fa fa-share-square"></i> Receive Purchase Order</a>
                         </div>
                     </div>
                     <div class="card-body">

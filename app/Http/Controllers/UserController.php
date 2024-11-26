@@ -50,6 +50,31 @@ class UserController extends Controller
     public function member(){
         return view('users.registered_member');
     }
+
+    public function generateFullName(){
+
+        $sep = " \n\t";
+        User::all()->each(function($user) use ($sep){
+            $names = [];
+            $token = strtok($user->last_name, $sep);
+            while ($token !== false) {
+                $names[] = $token;
+                $token = strtok($sep);
+            }
+            // dd($names);
+            $user->last_name = $names[0];
+            if( array_key_exists(1, $names) && $names[1] != null){
+                $user->middle_name = $names[1];
+            }
+            if( array_key_exists(2, $names) && $names[2] != null){
+                $user->first_name = array_slice($names, 2);
+            }else{
+                $user->last_name = $user->last_name;
+            }
+            $user->save();
+
+        });
+    }
     public function get_table_data(Request $request)
     {
 
@@ -64,7 +89,7 @@ class UserController extends Controller
         return DataTables::eloquent($users)
             ->filter(function ($query) use ($request) {
                 if ($request->has('last_name')) {
-                    $query->where('last_name', 'like', "%{$request->get('last_name')}%");
+                    $query->where('users.fullname_virtual', 'like', "%{$request->get('last_name')}%");
                 }
 
                 // if ($request->has('department')) {
@@ -87,8 +112,8 @@ class UserController extends Controller
 
                 return member_status($user->member_status);
             })
-            ->editColumn('other_names', function ($user) {
-                return $user->middle_name . ' ' . $user->last_name;
+            ->editColumn('user_names', function ($user) {
+                return $user->fullname_virtual;
             })
             ->addColumn('action', function ($user) {
                 return '<div class="dropdown text-center">'
@@ -108,11 +133,16 @@ class UserController extends Controller
     {
         $users = Member::whereIn('status', [3,6])
                 ->join('users', 'members.user_id', '=', 'users.id')
-                ->select('members.*', 'users.first_name', 'users.email')
+                ->select('members.*', 'users.fullname_virtual', 'users.email')
                 ->orderBy('created_at', 'desc');
 
 
         return DataTables::eloquent($users)
+         ->filter(function ($query) use ($request) {
+                if ($request->has('last_name')) {
+                    $query->where('users.fullname_virtual', 'like', "%{$request->get('last_name')}%");
+                }
+            })
             ->editColumn('email', function ($user) {
 
                 return $user->user->email;
@@ -122,7 +152,7 @@ class UserController extends Controller
                 return member_status($user->status);
             })
             ->editColumn('member_names', function ($user) {
-                return $user->user->middle_name . ' ' . $user->user->last_name . " ". $user->user->first_name;
+                return $user->user->fullname_virtual;
             })
             ->addColumn('action', function ($user) {
                 return '<div class="dropdown text-center">'

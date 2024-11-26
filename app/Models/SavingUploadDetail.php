@@ -12,7 +12,7 @@ class SavingUploadDetail extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $cast = [
+    protected $casts = [
         'deduction_period' => 'date',
     ];
 

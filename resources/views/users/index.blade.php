@@ -91,8 +91,8 @@
                             <table class="display datatables" id="server-side-datatable">
                                 <thead>
                                     <tr>
-                                        <th>first Name</th>
-                                        <th>Other Names</th>
+
+                                        <th> Names</th>
                                         <th>Status</th>
                                         <th>email</th>
                                         <th>action</th>
@@ -101,8 +101,8 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>first Name</th>
-                                        <th>Other Names</th>
+
+                                        <th>Names</th>
                                         <th>Status</th>
                                         <th>email</th>
                                         <th>action</th>
@@ -176,12 +176,9 @@
                             console.log(request.responseText);
                         }
                     }),
-                    "columns": [{
-                            data: "first_name",
-                            name: "first_name"
-                        },
+                    "columns": [
                         {
-                            data: "other_names",
+                            data: "user_names",
                             name: "other_names"
                         },
                         {

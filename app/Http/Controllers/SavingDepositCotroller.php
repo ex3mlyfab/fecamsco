@@ -29,7 +29,7 @@ class SavingDepositCotroller extends Controller
     }
     public function get_contribution_data(Request $request)
     {
-        $users = SavingUploadDetail::orderBy('created_at', 'desc');
+        $users = SavingUploadDetail::orderBy('deduction_period', 'desc');
 
         // $users = User::with("member")
         //     ->select('users.*')
@@ -67,7 +67,7 @@ class SavingDepositCotroller extends Controller
             })
             ->editColumn('deposit_period', function ($user) {
 
-                return date('Y-M',strtotime($user->deduction_period));
+                return $user->deduction_period->format('Y-M');
             })
             ->editColumn('uploaded_by', function ($user) {
                 return ($user->uploadedBy->middle_name ?? " ") . ' ' . ($user->uploadedBy->last_name ?? " ") . " ". ($user->uploadedBy->first_name?? " ");
@@ -119,7 +119,7 @@ class SavingDepositCotroller extends Controller
         return view('office.ctlss-upload');
     }
     public function get_ctls_data(Request $request){
-        $users = CtlsDetails::orderBy('created_at', 'desc');
+        $users = CtlsDetails::orderBy('deduction_period', 'desc');
 
         // $users = User::with("member")
         //     ->select('users.*')
@@ -157,7 +157,7 @@ class SavingDepositCotroller extends Controller
             })
             ->editColumn('deposit_period', function ($user) {
 
-                return date('M-Y',strtotime($user->deduction_period));
+                return $user->deduction_period->format('Y-M');
             })
             ->editColumn('uploaded_by', function ($user) {
                 return ($user->uploadedBy->middle_name ?? " ") . ' ' . ($user->uploadedBy->last_name ?? " ") . " ". ($user->uploadedBy->first_name?? " ");
