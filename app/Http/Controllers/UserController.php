@@ -147,7 +147,7 @@ class UserController extends Controller
                     $query->where('users.fullname_virtual', 'like', "%{$request->get('last_name')}%");
                 }
                 if ($request->has('ippis')) {
-                   $query->where('members.ippis_no', $request->get('ippis'));
+                   $query->where('members.ippis_no','like',  "%{$request->get('ippis')}%");
                 }
             })
             ->editColumn('email', function ($user) {
