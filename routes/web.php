@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationSettingController;
 use App\Http\Controllers\LoanPlanController;
 use App\Http\Controllers\LoanRequestController;
 use App\Http\Controllers\MemberController;
@@ -166,6 +167,16 @@ Route::middleware('auth')->group(function () {
         Route::post('user/get_online_data',[UserController::class, 'get_online_data'])->name('online.datatable');
         Route::get('/approve-memberhip/{user}/treat', [UserController::class, 'approveMembership'])->name('membership.approve')->can('approve-member');
         Route::get('/deny-memberhip/{user}/treat', [UserController::class, 'declineMembership'])->name('membership.decline')->can('deny-membership');
+    });
+
+    Route::prefix('application')->group(function () {
+        Route::get('/index', [ApplicationSettingController::class, 'index'])->name('application.index');
+        Route::post('/storeSetting', [ApplicationSettingController::class, 'storeSetting'])->name('application.store');
+        Route::patch('/updateSetting/{setting}', [ApplicationSettingController::class, 'update'])->name('application.update');
+        Route::post('/executives/add', [ApplicationSettingController::class, 'addUserToExco'])->name('executive.store');
+        Route::get('/executives',[ApplicationSettingController::class, 'executives'])->name('executive.index');
+        Route::patch('update-executive/{executive}', [ApplicationSettingController::class, 'updateExecutive']);
+
     });
 });
 Route::get('/rundown', [UserController::class, 'generateFullName'])->name('rundown');

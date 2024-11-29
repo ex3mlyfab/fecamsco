@@ -161,6 +161,9 @@
                                    Roles</a></li>
                             <li><a href="{{ route('permission.create') }}" class="{{ routeActive('permission.create') }}">Permissions</a></li>
                             <li><a href="{{ route('role.assign') }}" class="{{ routeActive('role.assign') }}">Assign Role to User</a></li>
+                            <li><a href="{{ route('application.index') }}" class="{{ routeActive('application.index') }}">Application Settings</a></li>
+                            <li><a href="{{ route('executive.index') }}" class="{{ routeActive('executive.index') }}">Executives</a></li>
+
 
 
 
