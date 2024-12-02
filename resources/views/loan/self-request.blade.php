@@ -86,8 +86,8 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="file_no">Loan Purpose<span class="text-danger">*</span></label>
-                                <input class="form-control input-air-secondary" id="file_no" type="text"
+                                <label for="loan_purpose">Loan Purpose<span class="text-danger">*</span></label>
+                                <input class="form-control input-air-secondary" id="loan_purpose" type="text"
                                     value="{{ old('purpose') }}" name="purpose" placeholder="Loan Purpose"
                                     required />
                             </div>
@@ -219,6 +219,7 @@
                                     </div>
                                 </div>
                         </div>
+                         <div class="my-3"><h5>NB: An admin charge of {!! showAmount($admincharge) !!} will be applied to Loan Amount Granted</h5></div>
                         <button type="submit" class="btn btn-lg btn-outline-primary w-100">Apply for Loan</button>
 
                 </form>
@@ -240,8 +241,8 @@
             // Denotes total number of rows
             var rowIdx = 0;
             let product_price, product_name, product_quantity, product_line_total, select_product_id;
-            let product_ids = [];
-            let product_prices = [];
+            const product_ids = [];
+            const product_prices = [];
 
             $('#select_product').on('change', function(){
                 // console.log('event success');
@@ -428,6 +429,7 @@
 
                     } else {
                         // Otherwise, remove it
+                        $('#loan_purpose').val("Electronics/Appliances/Foodstuff");
                         $("#account_details").hide()
                         $("#product-in-select").show();
                         $('#loan_amount').attr('readonly', true);

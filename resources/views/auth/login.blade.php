@@ -11,7 +11,7 @@
     <section>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-xl-5"><img class="bg-img-cover bg-center" src="{{ asset('2.png') }}" alt="looginpage" /></div>
+                <div class="col-xl-5"><img class="bg-img-cover bg-center" src="{{ asset('2.png') }}" alt="loginpage" /></div>
                 <div class="col-xl-7 p-0">
                     <div class="login-card">
                         <form class="theme-form login-form" method="POST" action="{{ route('login') }}">
@@ -37,7 +37,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="icon-lock"></i></span>
                                     <input class="form-control @error('password') is-invalid @enderror" name="password"
-                                        required type="password" />
+                                        required type="password" id="password"/>
                                     <div class="show-hide"><span class="show"> </span></div>
                                 </div>
                                 @error('password')

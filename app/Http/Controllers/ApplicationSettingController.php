@@ -45,8 +45,10 @@ class ApplicationSettingController extends Controller
         return redirect()->back()->with('message', 'Setting updated successfully');
     }
     public function addUserToExco(Request $request){
+
+        // dd($request->all());
        $request->validate([
-           'postion' => 'required',
+           'position' => 'required',
            'user_id' => 'required',
            'status' => 'required',
            'avatar' => 'nullable'
@@ -54,7 +56,7 @@ class ApplicationSettingController extends Controller
 
        Executive::create([
         'user_id' => $request->user_id,
-        'position' => $request->postion,
+        'position' => $request->position,
         'status' => 1,
         'avatar'=> $request->avatar
        ]);

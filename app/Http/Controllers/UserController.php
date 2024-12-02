@@ -168,7 +168,10 @@ class UserController extends Controller
                     . '<div class="dropdown-menu">'
                     . '<a href="' . route('user.show', $user->user->id) . '" class="dropdown-item ajax-modal"><i class="fa fa-user"></i> ' . __('Show User') . '</a>'
                     . '<a href="' . route('member-update.create', $user->user->id) . '" data-fullscreen="true" class="dropdown-item ajax-modal">' . __('Edit User') . '</a>'
-                    .'<a href="' . route('member-email.create', $user->user->id) . '" data-fullscreen="true" class="dropdown-item ajax-modal">' . __('Edit User Email') . '</a>'.'</div>';
+                    .
+                    '<a href="' . route('deposit.manual', $user->user->id) . '" data-fullscreen="true" class="dropdown-item ajax-modal">' . __('ManualDeposit') . '</a>'.
+                    '<a href="' . route('member-email.create', $user->user->id) . '" data-fullscreen="true" class="dropdown-item ajax-modal">' . __('Edit User Email') . '</a>'
+                    .'</div>';
             })
             ->setRowId(function ($user) {
                 return "row_" . $user->id;

@@ -1,7 +1,7 @@
 @extends('layouts.modern-layout.master')
 
 @section('title')
-    Revenue List
+    Sales List
 @endsection
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
@@ -11,10 +11,10 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('breadcrumb_title')
-            <h3>Revenue</h3>
+            <h3>sales</h3>
         @endslot
         <li class="breadcrumb-item">Admin</li>
-        <li class="breadcrumb-item active">All Revenue List</li>
+        <li class="breadcrumb-item active">All sales List</li>
     @endcomponent
 
     <div class="container-fluid">
@@ -27,7 +27,7 @@
                                 <label>{{ __('Year') }}</label>
                                 <select class="form-select btn-pill digits select-filter" id="exampleFormControlSelect7" name="year">
                                     <option value="">Select Year</option>
-                                    @foreach ($revenue_year as $item)
+                                    @foreach ($sales_year as $item)
                                         <option value="{{ $item->year }}" @selected(now()->year == $item->year)>{{ $item->year }}</option>
                                     @endforeach
 								</select>
@@ -38,7 +38,10 @@
                                     <input class="form-control digits" type="text" name="daterange" id="date_range" />
                                 </div>
                             </div>
-
+                            <div class="col-lg-3 mb-2">
+                                <label>{{ __('Member Name') }}</label>
+                                <input type="text" class="form-control select-filter" name="last_name" id="first-name">
+                            </div>
 
                         </div>
                         <div class="table-responsive">
@@ -46,17 +49,18 @@
                                 <thead>
                                     <tr>
                                         <th> Date</th>
-                                        <th>Detail</th>
+                                        <th>User</th>
                                         <th>Amount</th>
+                                        <th>action</th>
 
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Detail</th>
+                                        <th>user</th>
                                         <th>Amount</th>
-
+                                        <th>action</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -102,13 +106,15 @@
                     'next': '<i class="fa fa-chevron-right"></i>'
                              },
                     ajax: ({
-                        url: '{{ route('revenues.datatable') }}',
+                        url: '{{ route('sales.datatable') }}',
                         method: "POST",
                         data: function(d) {
 
                             d._token = $('meta[name="csrf-token"]').attr('content');
 
-                          
+                            if ($('input[name=last_name]').val() != '') {
+                                d.last_name = $('input[name=last_name]').val();
+                            }
 
                             if ($('select[name=year]').val() != '') {
                             	d.year = $('select[name=year]').val();
@@ -132,14 +138,17 @@
                             name: "createdt_at"
                         },
                         {
-                            data: "details",
-                            name: "detail"
+                            data: "member_names",
+                            name: "fullname"
                         },
                         {
-                            data: "cal_amount",
-                            name: "amount"
+                            data: "price",
+                            name: "Total_cost"
                         },
-
+                        {
+                            data: "action",
+                            name: "action"
+                        },
                     ],
                     responsive: true,
                     "bStateSave": true,
@@ -175,28 +184,28 @@
                             exportOptions: {
                                 columns: [0, 1, 2, 3]
                             },
-                            title: 'Revenue',
+                            title: 'sales',
                         },
                         {
                             extend: 'copy',
                             exportOptions: {
                                 columns: [0, 1, 2, 3]
                             },
-                            title: 'Revenue',
+                            title: 'sales',
                         },
                         {
                             extend: 'pdf',
                             exportOptions: {
                                 columns: [0, 1, 2, 3]
                             },
-                            title: 'Revenue',
+                            title: 'sales',
                         },
                         {
                             extend: 'print',
                             exportOptions: {
                                 columns: [0, 1, 2, 3]
                             },
-                            title: 'Revenue',
+                            title: 'sales',
                             customize: function(win) {
                                 $(win.document.body)
                                     .css('font-size', '10pt')
@@ -212,11 +221,13 @@
                     }
                 });
 
-
-                 $('.select-filter').on('change', function(e) {
+                $('#first-name').on('keyup', function(e) {
                     invoice_table.draw();
                 });
 
+                $('.select-filter').on('change', function(e) {
+                    invoice_table.draw();
+                });
 
                 $('#date_range').daterangepicker({
                     autoUpdateInput: false,

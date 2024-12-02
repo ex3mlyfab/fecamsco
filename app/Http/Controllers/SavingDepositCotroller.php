@@ -23,13 +23,14 @@ class SavingDepositCotroller extends Controller
      */
     public function index()
     {
+         $ctss_year = SavingUploadDetail::select(DB::raw('YEAR(deduction_period) as year'))->groupBy('year')->orderBy('year', 'desc')->get();
 
-
-        return view('office.index');
+        return view('office.index', compact('ctss_year'));
     }
     public function get_contribution_data(Request $request)
     {
-        $users = SavingUploadDetail::orderBy('deduction_period', 'desc');
+        $users = SavingUploadDetail::whereYear('deduction_period', $request->get('year'))
+                    ->orderBy('deduction_period', 'desc');
 
         // $users = User::with("member")
         //     ->select('users.*')
@@ -40,7 +41,7 @@ class SavingDepositCotroller extends Controller
         //     ->orderBy("invoices.id", "desc");
 
         return DataTables::eloquent($users)
-            // ->filter(function ($query) use ($request) {
+            ->filter(function ($query) use ($request) {
             //     if ($request->has('last_name')) {
             //         $query->where('users.last_name', 'like', "%{$request->get('last_name')}%");
             //     }
@@ -53,14 +54,14 @@ class SavingDepositCotroller extends Controller
             //     //     $query->whereIn('status', json_decode($request->get('status')));
             //     // }
 
-            //     // if ($request->has('date_range')) {
-            //     //     $date_range = explode(" - ", $request->get('date_range'));
-            //     //     $query->whereBetween('invoice_date', [$date_range[0], $date_range[1]]);
-            //     // }
+                if ($request->has('date_range')) {
+                    $date_range = explode(" - ", $request->get('date_range'));
+                    $query->whereBetween('deduction_period', [$date_range[0], $date_range[1]]);
+                }
             // })
             // ->editColumn('grand_total', function ($invoice) use ($currency) {
             //     return "<span class='float-right'>" . decimalPlace($invoice->grand_total, $currency) . "</span>";
-            // })
+            })
             ->editColumn('amount', function ($user) {
 
                 return showAmountPer($user->total_saving);
@@ -116,10 +117,12 @@ class SavingDepositCotroller extends Controller
         //
     }
     public function ctls(){
-        return view('office.ctlss-upload');
+        $ctls_year = CtlsDetails::select(DB::raw('YEAR(deduction_period) as year'))->groupBy('year')->orderBy('year', 'desc')->get();
+        return view('office.ctlss-upload', compact('ctls_year'));
     }
     public function get_ctls_data(Request $request){
-        $users = CtlsDetails::orderBy('deduction_period', 'desc');
+        $users = CtlsDetails::whereYear('deduction_period', $request->get('year'))
+                            ->orderBy('deduction_period', 'desc');
 
         // $users = User::with("member")
         //     ->select('users.*')
@@ -130,7 +133,7 @@ class SavingDepositCotroller extends Controller
         //     ->orderBy("invoices.id", "desc");
 
         return DataTables::eloquent($users)
-            // ->filter(function ($query) use ($request) {
+             ->filter(function ($query) use ($request) {
             //     if ($request->has('last_name')) {
             //         $query->where('users.last_name', 'like', "%{$request->get('last_name')}%");
             //     }
@@ -143,11 +146,11 @@ class SavingDepositCotroller extends Controller
             //     //     $query->whereIn('status', json_decode($request->get('status')));
             //     // }
 
-            //     // if ($request->has('date_range')) {
-            //     //     $date_range = explode(" - ", $request->get('date_range'));
-            //     //     $query->whereBetween('invoice_date', [$date_range[0], $date_range[1]]);
-            //     // }
-            // })
+                if ($request->has('date_range')) {
+                    $date_range = explode(" - ", $request->get('date_range'));
+                    $query->whereBetween('deduction_period', [$date_range[0], $date_range[1]]);
+                }
+            })
             // ->editColumn('grand_total', function ($invoice) use ($currency) {
             //     return "<span class='float-right'>" . decimalPlace($invoice->grand_total, $currency) . "</span>";
             // })

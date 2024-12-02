@@ -55,7 +55,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class);}
     public function member(): HasOne
     {
         return $this->hasOne(Member::class);

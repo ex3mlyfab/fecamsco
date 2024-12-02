@@ -10,6 +10,7 @@
     @component('components.breadcrumb')
         @slot('breadcrumb_title')
             <h3> EXECUTIVE MEBERS</h3>
+            {{public_path()}}
         @endslot
     @endcomponent
     <div class="container-fluid dashboard-default-sec">
@@ -39,12 +40,12 @@
                                             <tr>
                                                 <td>{{ $executive->user->fullname }}</td>
                                                 <td>{{ $executive->position }}</td>
-                                                <td>{{ $executive->avatar ?? '<span class="pill pill-badge-info">No Image uploaded</span>' }}
+                                                <td>{{ $executive->avatar ?? "<span class='pill pill-badge-info'>No Image uploaded</span>" }}
                                                 </td>
                                                 <td><button class="btn btn-small btn-primary edit-button"
                                                         data-bs-toggle="modal" data-bs-target="#exampleModal"
                                                         data-id="{{ $executive->id }}" data-name="{{ $executive->user_id }}"
-                                                        data-position="{{ $executive->postion }}"
+                                                        data-position="{{ $executive->position }}"
                                                         data-avatar="{{ $executive->avatar }}"
                                                         data-status="{{ $executive->status }}"
                                                         id="edit{{ $executive->id }}">edit</button>
@@ -86,7 +87,7 @@
                         </div>
                         <div class="form-group">
                             <label for="value"> Position </label>
-                            <input type="text" name="value" id="value" class="form-control">
+                            <input type="text" name="position" id="value" class="form-control">
                         </div>
                         <div class="row">
                             <div class="col-12 mb-3">
@@ -130,7 +131,7 @@
                     let avatar = $(this).data('avatar');
                     $('#exampleModalLabel').text('Update executive');
                     $('#select-user').val(userId);
-                    $('#position').val(position);
+                    $('#value').val(position);
                     $('#regForm').attr('action', "{{ url('/') }}/application/update-executive/" + id);
                     $('#regForm').append('<input type="hidden" name="_method" value="PATCH">');
                 });

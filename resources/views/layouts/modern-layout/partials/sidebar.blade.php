@@ -122,7 +122,7 @@
                             </a></li>
                             <li><a href="{{ route('bankmandatebatch.all') }}" class="{{ routeActive('bankmandatebatch.all') }}">Bank Mandates Batch
                             </a></li>
-
+                            <li><a href="{{ route('revenues.all') }}" class="{{ routeActive('revenues.all') }}">All Revenue Report</a></li>
                             <li><a href="{{ route('loanplan.home') }}" class="{{ routeActive('loanplan.home') }}">All Transactions</a></li>
                             <li><a href="{{ route('add.user') }}" class="{{ routeActive('add.user') }}">Add New Member</a></li>
 
@@ -144,6 +144,7 @@
                             <li><a href="{{ route('purchase-order.ceate') }}" class="{{ routeActive('purchase-order.ceate') }}">Create Purchase Order</a></li>
                             <li><a href="{{ route('purchase-order.all') }}" class="{{ routeActive('purchase-order.all') }}">All Purchase Orders</a></li>
                             <li><a href="{{ route('receive-order.all') }}" class="{{ routeActive('receive-order.all') }}">All Receive Orders</a></li>
+                            <li><a href="{{ route('sales.all') }}" class="{{ routeActive('sales.all') }}">Sales Report</a></li>
 
 
 

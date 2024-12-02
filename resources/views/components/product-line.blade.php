@@ -16,13 +16,13 @@
                     <select class="js-example-basic-single " id="select_product" >
                         <option value=" ">--Please choose Product--</option>
                         @foreach ($products as $product)
-                            <option value="{{$product->id. "," .$product->current_selling. ",". $product->name}}"> {{$product->name}} </option>
+                            <option value="{{$product->id. "," .$product->latestProductPrice->current_price. ",". $product->name}}"> {{$product->name}} </option>
                         @endforeach
                     </select>
                 </td>
                 <td>
                     <div class="form-group">
-                        <input type="number" class="form-control input-air-secondary" id="product_price" readonly>
+                        <input type="text" class="form-control input-air-secondary" id="product_price" readonly>
                     </div>
 
                 </td>
@@ -34,7 +34,7 @@
                 </td>
 
                 <td>
-                    <input type="number" id="total_pr" class="form-control input-air-secondary" readonly>
+                    <input type="text" id="total_pr" class="form-control input-air-secondary" readonly>
                 </td>
                 <td>
                     <span class="badge badge-danger" id="already-added">Present in cart</span>

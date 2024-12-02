@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/date-picker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.css') }}">
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatable-extension.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/daterange-picker.css') }}">
 
 @endpush
 @section('content')
@@ -62,9 +63,21 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-3 mb-2">
-                                        <label>{{ __('Deduction Period') }}</label>
-                                        <input type="date" class="form-control" name="deduction_period" id="first-name">
-                                    </div>
+
+                                     <label>{{ __('Year') }}</label>
+                                <select class="form-select btn-pill digits select-filter" id="exampleFormControlSelect7" name="year">
+                                    <option value="">Select Year</option>
+                                    @foreach ($ctss_year as $item)
+                                        <option value="{{ $item->year}}" @selected(now()->year == $item->year)>{{ $item->year }}</option>
+                                    @endforeach
+								</select>
+                            </div>
+                            <div class="col-lg-3 mb-2">
+                                <label>{{ __('Select date Range') }}</label>
+                                <div class="form-group">
+                                    <input class="form-control digits" type="text" name="daterange" id="date_range" />
+                                </div>
+                            </div>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="display datatables" id="server-side-datatable">
@@ -122,6 +135,8 @@
     <script src="{{asset('assets/js/datatable/datatable-extension/dataTables.fixedHeader.min.js')}}"></script>
     <script src="{{asset('assets/js/datatable/datatable-extension/dataTables.rowReorder.min.js')}}"></script>
     <script src="{{asset('assets/js/datatable/datatable-extension/dataTables.scroller.min.js')}}"></script>
+    <script src="{{ asset('assets/js/datepicker/daterange-picker/moment.min.js') }}"></script>
+     <script src="{{ asset('assets/js/datepicker/daterange-picker/daterangepicker.js') }}"></script>
     <script>
         (function($) {
             "use strict";
@@ -137,9 +152,14 @@
 
                             d._token = $('meta[name="csrf-token"]').attr('content');
 
-                            if ($('input[name=deduction_period]').val() != '') {
-                                d.last_name = $('input[name=deduction_period]').val();
+                            if ($('select[name=year]').val() != '') {
+                            	d.year = $('select[name=year]').val();
                             }
+
+                            if ($('input[name=daterange]').val() != '') {
+                            	d.daterange = $('input[name=daterange]').val();
+                            }
+
 
                             // if ($('select[name=client_id]').val() != '') {
                             // 	d.client_id = $('select[name=client_id]').val();
@@ -253,10 +273,30 @@
                     }
                 });
 
-                $('#first-name').on('keyup', function(e) {
+
+                $('.select-filter').on('change', function(e) {
                     invoice_table.draw();
                 });
 
+
+                $('#date_range').daterangepicker({
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        cancelLabel: 'Clear'
+                    }
+                });
+
+                $('#date_range').on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
+                        'YYYY-MM-DD'));
+                    invoice_table.draw();
+                });
+
+                $('#date_range').on('cancel.daterangepicker', function(ev, picker) {
+                    $(this).val('');
+                    invoice_table.draw();
+                });
                 // $('.select-filter').on('change', function(e) {
                 //     invoice_table.draw();
                 // });

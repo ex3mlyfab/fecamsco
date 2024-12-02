@@ -33,6 +33,7 @@
                     <div class="row">
                         <div class="col-12">
                             <label class="col-form-label">Select Member</label>
+
                                 <select class="js-example-basic-single col-sm-12" name="user_id">
                                     @foreach ($members as $item)
                                         <option value="{{$item->user_id}}">{{$item->user->fullname}}</option>
@@ -46,7 +47,7 @@
                             <div class="card">
                                 <div class="media p-20">
                                     <div class="radio radio-primary me-3">
-                                        <input id="radio14" type="radio" class="loan-type" name="loan_type" value="Financial" />
+                                        <input id="radio14" type="radio" class="loan-type" name="loan_type" value="Financial" checked />
                                         <label for="radio14"></label>
                                     </div>
                                     <div class="media-body">
@@ -65,7 +66,7 @@
                                     </div>
                                     <div class="media-body">
                                         <h6 class="mt-0 mega-title-badge">Electronics Loan</h6>
-                                        <p>Electronics/Appliances </p>
+                                        <p>Electronics/Appliances/FoodStuff </p>
                                     </div>
                                 </div>
                             </div>
@@ -96,7 +97,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="file_no">Loan Purpose<span class="text-danger">*</span></label>
-                                <input class="form-control input-air-secondary" id="file_no" type="text"
+                                <input class="form-control input-air-secondary" id="loan_purpose" type="text"
                                     value="{{ old('purpose') }}" name="purpose" placeholder="Loan Purpose"
                                     required />
                             </div>
@@ -228,6 +229,7 @@
                                     </div>
                                 </div>
                         </div>
+                        <div class="my-3"><h5>NB: An admin charge of {!! showAmount($admincharge) !!} will be applied to Loan Amount Granted</h5></div>
                         <button type="submit" class="btn btn-lg btn-outline-primary w-100">Apply for Loan</button>
 
                 </form>
@@ -244,26 +246,32 @@
             $('#already-added').hide();
             $("#product-in-select").hide();
 
+            const formatCurrency = (number, symbol= '₦') =>{
+                //add thousands seperator
+                const formattedNumber =number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return `${symbol}${formattedNumber}`;
+            }
 
             $(".js-example-basic-single").select2();
             // Denotes total number of rows
             var rowIdx = 0;
             let product_price, product_name, product_quantity, product_line_total, select_product_id;
-            let product_ids = [];
-            let product_prices = [];
+            const product_ids = [];
+            const product_prices = [];
 
             $('#select_product').on('change', function(){
                 // console.log('event success');
                 let product_array = $(this).val().split(",");
                 product_name = product_array[2];
                 product_price = parseInt(product_array[1]);
-                select_product_id = parseInt(product_array[0]);
+                let money_price = new Intl.NumberFormat().format(product_price);
+                select_product_id = product_array[0];
 
 
                 product_quantity =product_quantity? product_quantity : 0;
                 // console.log(product_price, product_name, product_id);
                 calculate_total(product_price, product_quantity);
-                $('#product_price').val(product_price);
+                $('#product_price').val(product_price.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'}));
 
             });
             $('#qty_pr').on('keyup', function(){
@@ -291,7 +299,7 @@
                 let total = pr_price*qty;
                 product_line_total = total;
                 // console.log("product_id:"+ product_ids)
-                $('#total_pr').val(total);
+                $('#total_pr').val(total.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'}));
                 if(total > 0 && select_product_id > 0){
                 $('#add-product').attr('disabled', false);
                 }
@@ -301,7 +309,7 @@
 
                 product_ids.push(select_product_id);
                 let occurence = prIdCount(product_ids, select_product_id);
-                console.log(occurence);
+                // console.log(occurence);
 
 
                 if(occurence < 2){
@@ -315,12 +323,12 @@
                         <p> ${product_name}</p>
                     </td>
                     <td>
-                        <p> ${product_price}</p>
+                        <p> ${product_price.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'})}</p>
                     </td>
                     <td>
                         <p>${product_quantity}</p>
                         </td>
-                    <td><p class"productSelected">${product_line_total}</p></td>
+                    <td><p class"productSelected">${product_line_total.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'})}</p></td>
                     <td class="text-center">
                         <button class="btn btn-danger remove"
                         type="button">Remove</button>
@@ -379,14 +387,14 @@
                     </tr>`);x
             })
              // jQuery button click event to remove a row.
-                $('#tbody').on('click', '.remove', function () {
+         $('#tbody').on('click', '.remove', function () {
 
                     // Getting all the rows next to the row
                     // containing the clicked button
                     var child = $(this).closest('tr').nextAll();
 
                     let productIndex = $(this).closest('tr').attr('data-productId');
-                    // console.log(productIndex);
+                    console.log(productIndex);
                     let productP_value = parseInt( $('#Pr'+ productIndex).val())
                     let productP_index = product_prices.indexOf(productP_value);
                     let pr_index= product_ids.indexOf(productIndex);
@@ -420,7 +428,7 @@
                     $('#loan_amount').val(selectedProductSum());
                     // Decreasing total number of rows by 1.
                     rowIdx--;
-                    });
+                });
 
 
                 // Bind the toggleClass function to the click event of the button
@@ -437,6 +445,7 @@
 
                     } else {
                         // Otherwise, remove it
+                        $('#loan_purpose').val('Electronic/Appliances/Foodstuff')
                         $("#account_details").hide()
                         $("#product-in-select").show();
                         $('#loan_amount').attr('readonly', true);

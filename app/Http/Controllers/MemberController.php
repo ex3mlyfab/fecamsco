@@ -54,10 +54,10 @@ class MemberController extends Controller
             'witness_phone.*' => 'nullable|required|string',
             'passport_photograph' => 'nullable|image'
         ]);
-       
+
         if (isset($data['passport_photograph'])) {
             //
-            
+
             $file = $data['passport_photograph']; // your base64 encoded
             // dd($request->passport_photograph, public_path());
             // using file pond
@@ -79,7 +79,7 @@ class MemberController extends Controller
                 // );
             $fileName =  $data['last_name']. Date('Y-m-d') . 'member' . '.' . $extension;
             $file->move($storage_path, $fileName);
-            
+
 
             $data['avatar'] = $fileName;
         }
@@ -213,7 +213,7 @@ class MemberController extends Controller
                 'email' => $data['email'],
             ]);
 
-            
+
             if(isset($data['avatar'])){
                 $member->member()->update([
                     'avatar' => $data['avatar']
@@ -467,6 +467,9 @@ class MemberController extends Controller
     public function show(string $id)
     {
         //
+    }
+    public function manualDeposit(User $user){
+        return view('users.manual-deposit', compact('user'));
     }
 
     /**

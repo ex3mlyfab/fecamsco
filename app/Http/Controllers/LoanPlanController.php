@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\BankMandate;
 use App\Models\BankMandateDetail;
+use App\Models\Executive;
 use App\Models\Installment;
 use App\Models\Loan;
 use App\Models\Member;
@@ -94,7 +96,7 @@ class LoanPlanController extends Controller
     }
     public function selfLoanDetail(Loan $loan)
     {
-        if (auth()->user()->id != $loan->user_id) abort(403, "You are not permitted to view this pae");
+        if (auth()->user()->id != $loan->user_id) abort(403, "You are not permitted to view this page");
         return view('loan.personal-detail',[
             'loan' => $loan
         ]);
@@ -115,18 +117,31 @@ class LoanPlanController extends Controller
     public function applyLoan()
     {
         $members = Member::whereIn('status',[3,6])->get();
+        $admincharge = AppSetting::where('setting_name', 'loan-administration')->pluck('setting_value');
         $products = ProductService::all();
+        $excos[] =  Executive::all()->pluck('user_id')->toArray();
+        $exco_charge = AppSetting::where('setting_name', 'loan-exco-charge')->pluck('setting_value');
+        $member_charge = AppSetting::where('setting_name', 'loan-members-charge')->pluck('setting_value');
+
         return view('loan.request',[
             'members' => $members,
-            'products' => $products
+            'products' => $products,
+            'admincharge' =>(int) $admincharge[0],
+            'excos' => $excos,
+            'exco_charge' => $exco_charge[0] ,
+            'member_charge' => $member_charge[0]
+
         ]);
     }
+
     public function selfapplyLoan()
     {
         if (auth()->user()->member()->exists() && in_array(auth()->user()->member_status, [3,6])) {
+             $admincharge = AppSetting::where('setting_name', 'loan-administration')->pluck('setting_value');
             $products = ProductService::all();
               return view('loan.self-request',[
-                'products' => $products
+                'products' => $products,
+                'admincharge' => (int) $admincharge[0],
               ]);
         }else{
 
@@ -179,7 +194,7 @@ class LoanPlanController extends Controller
             return loan_status($user->status);
         })
         ->editColumn('member_names', function ($user) {
-            return $user->user->middle_name . ' ' . $user->user->last_name;
+            return ucwords($user->fullname_virtual);
         })
         ->addColumn('action', function ($user) {
             return '<div class="dropdown text-center">'
@@ -200,11 +215,19 @@ class LoanPlanController extends Controller
         // dd($request->all());
 
         $loan = Loan::findOrFail($request->loan_id);
+        // dd($loan);
+        $excos = Executive::all()->pluck('user_id');
+        $admincharge = $admincharge = AppSetting::where('setting_name', 'loan-administration')->pluck('setting_value');
+            $interest = 0.1;
+         if(in_array($loan->user_id, $excos->toArray()))
+            {
+                $interest = 0.08;
+            }
 
-            DB::transaction(function () use ($loan) {
+            DB::transaction(function () use ($loan, $interest, $admincharge) {
 
-                DB::transaction(function () use ($loan) {
-                    $loan->update([
+
+            $loan->update([
                         'status' => 1
                     ]);
             $installment_amount = 0;
@@ -213,13 +236,13 @@ class LoanPlanController extends Controller
             //if financial send details to await mandate;
             if($loan->loan_type == 1){
                 //deduct 8% charges and send the remaining to bank mandate, 8%deduction to revenue
-                $loancharges = $loan->amount* 0.08;
+                $loancharges = ($loan->amount* $interest) + (int)$admincharge[0];
 
                 $installment_amount = round($loan->amount / $loan->total_installments, 2) ;
                 $disbursement = $loan->amount - $loancharges;
                 //dd($disbursement);
                 $awaitingBatch = BankMandate::where('batch_id', 'unbatched Bank Mandate')->first();
-                if(!$awaitingBatch)
+                if(is_null($awaitingBatch))
                 {
                     $awaitingBatch = BankMandate::create([
                         'bank_account_id' => 1,
@@ -250,7 +273,7 @@ class LoanPlanController extends Controller
 
             }else{
             //else electronics send details to product sales
-             $loancharges = $loan->amount* 0.08;
+             $loancharges = ($loan->amount* $interest) + (int)$admincharge[0];
              $loan->update([
                     'amount' => $loan->amount + $loancharges,
                     'is_disbursed' =>true
@@ -291,7 +314,7 @@ class LoanPlanController extends Controller
             }
 
         });
-    });
+
         return redirect()->route('show.loan', $loan->id)->with([
             'message' => 'you have successfully Approved  Loan for '. $loan->user->fullname. '.'
         ]);

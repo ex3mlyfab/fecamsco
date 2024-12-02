@@ -93,6 +93,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/batch/{batch}/details', [RevenueController::class, 'bankMandateBatchShow'])->name('bankmandatebatch.show')->can('view-bank-mandate');
         Route::post('/batch/bankMandates/process', [RevenueController::class, 'bankMandateBatchProcess'])->name('bankmandatebatch.process')->can('process-batch');
         Route::post('/mandate-batch/get_batch_data',[RevenueController::class, 'get_batch_data'])->name('batch-mandate.datatable');
+        //revenues
+        Route::get('/revenues', [RevenueController::class, 'revenueReport'])->name('revenues.all')->can('view-revenues');
+        Route::post('/revenues/get_table_data',[RevenueController::class, 'get_revenue_data'])->name('revenues.datatable');
 
     });
     Route::prefix('savings')->group(function(){
@@ -124,6 +127,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/receive-order/index', [ProductServiceController::class, 'receiveOrder'])->name('receive-order.all')->can('create-receive-order');
         Route::get('/receive-order/show/process', [ProductServiceController::class, 'showReceiveOrder'])->name('receive-order.show')->can('create-receive-order');
         Route::post('/receive-order/process', [ProductServiceController::class, 'processReceiveOrder'])->name('receive-order.process')->can('create-receive-order');
+        //sales
+        Route::post('/sales/get_table_data',[ProductServiceController::class, 'sales_table'])->name('sales.datatable');
+        Route::get('/sales', [ProductServiceController::class, 'salesReport'])->name('sales.all')->can('create-sales');
+        Route::get('/sales/{sale}/show', [ProductServiceController::class, 'showSales'])->name('sales.show')->can('view-sales');
+        Route::post('/sales/total', [ProductServiceController::class, 'getSalesTotal'])->name('sales.total')->can('view-sales');
 
     });
     Route::prefix('loans')->group(function () {
@@ -167,6 +175,8 @@ Route::middleware('auth')->group(function () {
         Route::post('user/get_online_data',[UserController::class, 'get_online_data'])->name('online.datatable');
         Route::get('/approve-memberhip/{user}/treat', [UserController::class, 'approveMembership'])->name('membership.approve')->can('approve-member');
         Route::get('/deny-memberhip/{user}/treat', [UserController::class, 'declineMembership'])->name('membership.decline')->can('deny-membership');
+        //Maual deposit
+        Route::get('/manual-deposit/{user}', [MemberController::class, 'manualDeposit'])->name('deposit.manual')->can('manual-deposit');
     });
 
     Route::prefix('application')->group(function () {
