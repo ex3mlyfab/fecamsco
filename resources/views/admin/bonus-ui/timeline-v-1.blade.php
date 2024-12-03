@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')Timeline 1
- {{ $title }}
+ {{ $title ?? '' }}
 @endsection
 
 @push('css')
@@ -88,9 +88,9 @@
 			</div>
 		</div>
 	</div>
-	
 
-    @push('scripts') 
+
+    @push('scripts')
 	<script src="{{asset('assets/js/timeline/timeline-v-1/main.js')}}"></script>
     <script src="{{asset('assets/js/modernizr.js')}}"></script>
 	@endpush

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('export_trackers', function (Blueprint $table) {
             $table->id();
+            $table->string('export_type');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
         });
     }

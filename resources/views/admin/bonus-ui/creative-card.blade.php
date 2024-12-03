@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')Creative Card
- {{ $title }}
+ {{ $title  ?? '' }}
 @endsection
 
 @push('css')
@@ -176,9 +176,9 @@
 			</div>
 		</div>
 	</div>
-	
 
-@push('scripts') 
+
+@push('scripts')
 @endpush
 
 @endsection

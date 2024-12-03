@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')Form Builder 1
- {{ $title }}
+ {{ $title ?? ''}}
 @endsection
 
 @push('css')
@@ -54,7 +54,7 @@
     </div>
 
 
-    @push('scripts') 
+    @push('scripts')
     <script src="{{ asset('assets/js/counter/jquery.waypoints.min.js') }}"></script>
     <script src="{{ asset('assets/js/counter/jquery.counterup.min.js') }}"></script>
     <script src="{{ asset('assets/js/counter/counter-custom.js') }}"></script>

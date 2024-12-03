@@ -216,7 +216,7 @@ class ProductServiceController extends Controller
 
     public function getSalesTotal(Request $request)
     {
-        if($request->has('daterange')){
+        if(!is_null($request->daterange) ){
             $date_range = explode(" - ", $request->daterange);
             $request->merge([
                 'start_date' => $date_range[0],
@@ -227,6 +227,6 @@ class ProductServiceController extends Controller
             $sales = Sale::whereYear('created_at', $request->year)->sum('Total_cost');
         }
 
-        return response()->json($sales);
+        return response()->json(showAmountPer($sales));
     }
 }

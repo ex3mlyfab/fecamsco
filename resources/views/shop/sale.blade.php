@@ -65,6 +65,9 @@
                                 </tfoot>
                             </table>
                         </div>
+                        <div class="p-2 b-success rounded mt-1 d-flex justify-content-end align-items-center">
+                            <h5 class="float-right">Balance: <span id="total"></span></h5>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -97,6 +100,27 @@
         (function($) {
             "use strict";
             $(function() {
+                function getTotalSales() {
+                var total = 0;
+               $.ajax({
+                   url: "{{ route('sales.total') }}",
+                   method: "post",
+                   dataType: "json",
+                   data: {
+                       _token: "{{ csrf_token() }}",
+                       daterange: $('input[name=daterange]').val(),
+                       year: $('select[name=year]').val()
+                   },
+                   success: function(data) {
+                       total = data;
+                       $('#total').text(total);
+                   },
+                   error: function(request, status, error) {
+                       console.log(request.responseText);
+                   }
+               })
+            }
+                getTotalSales();
                 var invoice_table = $('#server-side-datatable').DataTable({
                     processing: true,
                     serverSide: true,
@@ -227,6 +251,7 @@
 
                 $('.select-filter').on('change', function(e) {
                     invoice_table.draw();
+                    getTotalSales();
                 });
 
                 $('#date_range').daterangepicker({
@@ -240,6 +265,7 @@
                 $('#date_range').on('apply.daterangepicker', function(ev, picker) {
                     $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
                         'YYYY-MM-DD'));
+                    getTotalSales();
                     invoice_table.draw();
                 });
 
@@ -249,6 +275,7 @@
                 });
 
             });
+
 
         })(jQuery);
     </script>

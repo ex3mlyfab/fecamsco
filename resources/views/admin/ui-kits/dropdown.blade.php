@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')Dropdown
- {{ $title }}
+ {{ $title ?? '' }}
 @endsection
 
 @push('css')
@@ -269,8 +269,8 @@
             </div>
         </div>
     </div>
-    
-@push('scripts') 
+
+@push('scripts')
 @endpush
 
 @endsection
