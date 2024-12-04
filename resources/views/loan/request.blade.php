@@ -91,7 +91,7 @@
                                 <label for="ippis_no">Number of installments<span class="text-danger">*</span></label>
                                 <input class="form-control input-air-secondary digit" id="ippis_no"
                                     type="number" placeholder="Installment" name="total_installments"
-                                    value="{{ old('total_installments') }}" />
+                                    value="{{ old('total_installments') }}" required />
                             </div>
                         </div>
                         <div class="col-md-4">

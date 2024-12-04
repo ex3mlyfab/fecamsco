@@ -81,7 +81,7 @@
                                 <label for="ippis_no">Number of installments<span class="text-danger">*</span></label>
                                 <input class="form-control input-air-secondary digit" id="ippis_no"
                                     type="number" placeholder="Installment" name="total_installments"
-                                    value="{{ old('total_installments') }}" />
+                                    value="{{ old('total_installments') }}"  required/>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -255,7 +255,7 @@
                 product_quantity =product_quantity? product_quantity : 0;
                 // console.log(product_price, product_name, product_id);
                 calculate_total(product_price, product_quantity);
-                $('#product_price').val(product_price);
+                $('#product_price').val(product_price.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'}));
 
             });
             $('#qty_pr').on('keyup', function(){
@@ -283,7 +283,7 @@
                 let total = pr_price*qty;
                 product_line_total = total;
                 // console.log("product_id:"+ product_ids)
-                $('#total_pr').val(total);
+                $('#total_pr').val(total.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'}));
                 if(total > 0 && select_product_id > 0){
                 $('#add-product').attr('disabled', false);
                 }
@@ -307,12 +307,12 @@
                         <p> ${product_name}</p>
                     </td>
                     <td>
-                        <p> ${product_price}</p>
+                        <p> ${product_price.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'})}</p>
                     </td>
                     <td>
                         <p>${product_quantity}</p>
                         </td>
-                    <td><p class"productSelected">${product_line_total}</p></td>
+                    <td><p class"productSelected">${product_line_total.toLocaleString('en-NG', { style: 'currency', currency: 'NGN'})}</p></td>
                     <td class="text-center">
                         <button class="btn btn-danger remove"
                         type="button">Remove</button>
