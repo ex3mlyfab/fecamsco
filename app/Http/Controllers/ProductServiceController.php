@@ -61,101 +61,24 @@ class ProductServiceController extends Controller
       ]);
       return redirect()->route('purchase-order.all')->with('message', 'order processed successfuly');
     }
-    public function showReceiveOrder(Request $request)
+    public function showReceiveOrder(PurchaseOrder $order)
     {
-        $orderTo = $request->process_order;
-        $order = PurchaseOrder::findOrFail($orderTo);
+
         // dd($order);
         return view('shop.show-receive-order',[
-            'order' => $order
+            'order' => $order,
+
         ]);
     }
     public function receiveOrder(){
 
         $ReadypurchaseOrder = PurchaseOrder::where('status', 2)->get();
         return view('shop.receive-order', [
-            'readyPurchase' => $ReadypurchaseOrder
+            'readyPurchase' => $ReadypurchaseOrder,
+            'receive_year' =>  ReceiveOrder::select(DB::raw('YEAR(created_at) as year'))->groupBy('year')->orderBy('year', 'desc')->get()
         ]);
     }
-    public function processReceiveOrder(Request $request){
 
-      $data = $request->validate([
-        'purchase_order_id' => 'required',
-        'product_id.*' => 'required',
-        'product_qty.*' => 'required',
-        'cost_price.*' => 'required',
-        'product_selling_price.*' => 'required',
-        'bank_name' => 'nullable',
-        'account_name' => 'nullable',
-        'account_number' => 'nullable',
-      ]);
-    //   dd($data);
-      DB::transaction(function () use($data) {
-            $supplied_total = 0;
-            foreach($data['product_qty'] as $key=>$lineItem){
-                $supplied_total += $lineItem * $data['cost_price'][$key];
-            }
-        $purchaseOrder = PurchaseOrder::findOrFail($data['purchase_order_id']);
-        $purchaseOrder->update([
-            'status' => 4
-        ]);
-
-        $receiveOrder = ReceiveOrder::create([
-            'purchase_order_id' => $purchaseOrder->id,
-            'received_by' => auth()->user()->id,
-            'cost' => $supplied_total,
-            'status' => 1,
-        ]);
-
-        $supplier_pay = SupplierPayment::create([
-            'supplier_id' =>$purchaseOrder->supplier_id,
-            'receive_order_id' => $receiveOrder->id,
-            'amount' =>$supplied_total,
-            'account_name' => $data['account_name'],
-            'account_number' => $data['account_number'],
-            'bank_name' => $data['bank_name'],
-            'status' => 1
-
-        ]);
-
-        foreach($data['product_id'] as $index=>$item){
-
-                if($data['product_qty'][$index] != 0)
-                {
-
-                    $product_id =  $data['product_id'][$index];
-                    // dd($product_id);
-                    $product_name = ProductService::findOrFail($product_id);
-                    $receiveOrder->receiveOrderDetails()->create([
-                        'product_service_id' => $product_id,
-                        'price' => $data['product_selling_price'][$index],
-                        'quantity' => $data['product_qty'][$index],
-                        'status' =>1
-                    ]);
-
-                    $product_name->productReceiveds()->create([
-                        'receive_order_id' => $receiveOrder->id,
-                        'quantity_received' => $data['product_qty'][$index],
-                        'cost_price' => $data['cost_price'][$index],
-                        'initial_qty' => $product_name->total_received,
-                        'quantity_received' => $data['product_qty'][$index],
-                        'cost_price' =>$data['cost_price'][$index],
-                        'selling_price' =>$data['product_selling_price'][$index],
-                    ]);
-
-                    $product_name->productPrices()->create([
-                            'current_price' => $data['product_selling_price'][$index],
-                            'added_by' => auth()->user()->id,
-                    ]);
-
-
-                }
-            }
-      });
-
-      return redirect()->route('receive-order.all')->with('message', 'receive order processed successfully');
-
-    }
     public function salesReport()
     {
 
@@ -167,6 +90,7 @@ class ProductServiceController extends Controller
     public function sales_table(Request $request)
     {
         $sales = Sale::join('users', 'sales.user_id', '=', 'users.id')
+
                 ->whereYear('sales.created_at', $request->get('year'))
                 ->select('sales.*', 'users.fullname_virtual')
                 ->orderBy('sales.created_at', 'desc');

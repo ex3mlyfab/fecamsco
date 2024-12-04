@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApplicationSettingController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoanPlanController;
 use App\Http\Controllers\LoanRequestController;
 use App\Http\Controllers\MemberController;
@@ -111,6 +112,13 @@ Route::middleware('auth')->group(function () {
 
     });
     Route::prefix('shops')->group(function () {
+        //Recieve Order
+        Route::get('/receive-order/index', [ProductServiceController::class, 'receiveOrder'])->name('receive-order.all')->can('create-receive-order');
+        Route::get('/receive-order/show/{order}', [ProductServiceController::class, 'showReceiveOrder'])->name('receive-order.show')->can('create-receive-order');
+        Route::post('/process-order', [HomeController::class, 'processReceiveOrder'])->name('receive.process')->can('create-receive-order');
+        Route::post('/receive-order/get_table_data',[HomeController::class, 'get_receive_order'])->name('receive-order.datatable');
+        Route::get('/recieve-order/{order}/processed', [HomeController::class, 'showReceivedOrder'])->name('receive-order.processed')->can('create-receive-order');
+        //suppliers
         Route::get('/product/supplier/create', [ProductServiceController::class, 'createSupplier'])->name('supplier.create')->can('create-supplier');
         Route::get('/product/supplier', [ProductServiceController::class, 'allSupplier'])->name('supplier.all')->can('view-suppliers');
         Route::get('/product-service/category', [ProductServiceController::class, 'category'])->name('product.category')->can('create-product-category');
@@ -123,10 +131,7 @@ Route::middleware('auth')->group(function () {
         Route::view('/purchase-order', 'shop.list-purchase-order')->name('purchase-order.all')->can('create-purchase-order');
         Route::get('/purchase-order/{order}/show', [ProductServiceController::class, 'showPurchaseOrder'])->name('purchase-order.show')->can('create-purchase-order');
         Route::patch('/purchase-order/{order}/process', [ProductServiceController::class, 'processPurchaseOrder'])->name('purchase-order.process')->can('process-purchase-order');
-        //Recieve Order
-        Route::get('/receive-order/index', [ProductServiceController::class, 'receiveOrder'])->name('receive-order.all')->can('create-receive-order');
-        Route::get('/receive-order/show/process', [ProductServiceController::class, 'showReceiveOrder'])->name('receive-order.show')->can('create-receive-order');
-        Route::post('/receive-order/process', [ProductServiceController::class, 'processReceiveOrder'])->name('receive-order.process')->can('create-receive-order');
+
         //sales
         Route::post('/sales/get_table_data',[ProductServiceController::class, 'sales_table'])->name('sales.datatable');
         Route::get('/sales', [ProductServiceController::class, 'salesReport'])->name('sales.all')->can('create-sales');
