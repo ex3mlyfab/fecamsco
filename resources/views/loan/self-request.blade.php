@@ -70,7 +70,7 @@
                                     <input class="form-control input-air-secondary digit"
                                         id="loan_amount" type="number" placeholder="Loan Amount"
                                         name="amount" value="{{ old('amount') }}"
-                                        min="5000"
+                                        min="5000" max="{{ auth()->user()->total_contribution}}"
                                         />
                                 </div>
 
@@ -78,8 +78,8 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="ippis_no">Number of installments<span class="text-danger">*</span></label>
-                                <input class="form-control input-air-secondary digit" id="ippis_no"
+                                <label for="installment_no">Number of installments<span class="text-danger">*</span></label>
+                                <input class="form-control input-air-secondary digit" id="installment_no"
                                     type="number" placeholder="Installment" name="total_installments"
                                     value="{{ old('total_installments') }}"  required/>
                             </div>
@@ -122,7 +122,7 @@
                         <div class="row pb-5"  id="product-in-select">
                             <x-product-line :products="$products"></x-product-line>
                         </div>
-                        <div class="row" class="border-2 b-primary">
+                        <div class="row" class="border-2 b-primary" id="loan-guarantors">
                             <h2 class="text-center">Loan Guarantors' details</h2>
                                 <div class="row">
                                     <div class="col-md-4">
@@ -193,33 +193,32 @@
                                             <input class="form-control input-air-secondary" id="witness3"
                                                 placeholder="witness name III" type="text" name="witness_name[]"
                                                 value="{{ old('witness_name[2]') }}"
-                                                required />
+                                                 />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label class="witness3_dept">Department of Witness III<span
-                                                    class="text-danger">*</span></label>
+                                            <label class="witness3_dept">Department of Witness III</label>
                                             <input class="form-control input-air-secondary" id="witness3_dept"
                                                 placeholder="witness III Department" type="text"
                                                 name="witness_department[]"
                                                 value="{{ old('witness_dept[2]') }}"
-                                                required />
+                                                 />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label class="witness3_phone">Telephone of Witness III<span
-                                                    class="text-danger">*</span></label>
+                                            <label class="witness3_phone">Telephone of Witness III</label>
                                             <input class="form-control input-air-secondary digit" id="witness3_phone"
                                                 placeholder="witness III Phone" type="text" name="witness_phone[]"
                                                 value="{{ old('witness_phone[2]') }}"
-                                                required />
+                                                 />
                                         </div>
                                     </div>
                                 </div>
+                                 <div class="my-3"><h5>NB: An admin charge of {!! showAmount($admincharge) !!} will be applied to Loan Amount Granted</h5></div>
                         </div>
-                         <div class="my-3"><h5>NB: An admin charge of {!! showAmount($admincharge) !!} will be applied to Loan Amount Granted</h5></div>
+
                         <button type="submit" class="btn btn-lg btn-outline-primary w-100">Apply for Loan</button>
 
                 </form>
@@ -341,8 +340,8 @@
             function clearProductTable(){
                 $('#tbody').children("tr").remove();
                 resetProductForm();
-                product_ids = [];
-                product_prices = [];
+                product_ids.splice(0, product_ids.length);
+               product_prices.splice(0, product_prices.length);
                 $('#loan_amount').attr('readonly', false);
 
             }
@@ -427,13 +426,29 @@
                         $("#product-in-select").hide()
                         clearProductTable();
 
+                        $('#witness1').attr('required', true);
+                        $('#witness2').attr('required', true);
+                        $('#witness1_dept').attr('required', true);
+                        $('#witness2_dept').attr('required', true);
+                        $('#witness1_phone').attr('required', true);
+                        $('#witness2_phone').attr('required', true);
+                        $('#installment_no').attr('max', 6);
+                        $('#loan-guarantors').show();
+
                     } else {
                         // Otherwise, remove it
                         $('#loan_purpose').val("Electronics/Appliances/Foodstuff");
+                        $('#loan-guarantors').hide();
                         $("#account_details").hide()
                         $("#product-in-select").show();
                         $('#loan_amount').attr('readonly', true);
-
+                        $('#witness1').attr('required', false);
+                        $('#witness2').attr('required', false);
+                        $('#witness1_dept').attr('required', false);
+                        $('#witness2_dept').attr('required', false);
+                        $('#witness1_phone').attr('required', false);
+                        $('#witness2_phone').attr('required', false);
+                        $('#installment_no').attr('max', 6);
                     }
                 }
 

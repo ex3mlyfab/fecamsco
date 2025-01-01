@@ -17,13 +17,17 @@
                     </div>
 
                     <div class="card-body">
+
+                        {{-- @foreach ($ctss_year as $item)
+                        {{$item['year']}}
+                        @endforeach --}}
                          <div class="row mb-2">
                             <div class="col-lg-3 mb-2">
                                 <label>{{ __('Year') }}</label>
                                 <select class="form-select btn-pill digits select-filter" id="exampleFormControlSelect7" name="year">
                                     <option value="">Select Year</option>
                                     @foreach ($ctss_year as $item)
-                                        <option value="{{ $item->year }}" @selected(now()->year == $item->year)>{{ $item->year }}</option>
+                                        <option value="{{ $item['year'] }}" @selected(now()->year ==  $item['year'])>{{  $item['year'] }}</option>
                                     @endforeach
 								</select>
                             </div>
@@ -75,13 +79,9 @@
      <script src="{{ asset('assets/js/datepicker/daterange-picker/daterangepicker.js') }}"></script>
         <script>
             $(document).ready(function () {
-
-                $('.select-filter').on('change', function(e) {
-
-                });
-                function drawTable(){
+                 function drawTable(){
                     $.ajax({
-                        url: {{ route('')}},
+                        url: "{{ route('analysis.deposit')}}",
                         method: "post",
                         dataType: "json",
                         data: {
@@ -95,9 +95,15 @@
                             console.log(request.responseText);
                     }
                 })
-                }
+             }
+                drawTable();
+                $('.select-filter').on('change', function(e) {
+                        drawTable();
+                });
 
-            })
+
+
+            });
         </script>
     @endpush
 @endsection

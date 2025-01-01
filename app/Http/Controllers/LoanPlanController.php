@@ -80,12 +80,14 @@ class LoanPlanController extends Controller
             return $user->user->middle_name . ' ' . $user->user->last_name;
         })
         ->addColumn('action', function ($user) {
+
+            $mes = ($user->loan_type === 2 ) ? "":'<a href="' . route('form.loan', $user->id) . '"  class="dropdown-item "><i class="fa fa-notes"></i> ' . __('Download Loan form') . '</a>';
             return '<div class="dropdown text-center">'
                 . '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . __('Action')
                 . '&nbsp;</button>'
                 . '<div class="dropdown-menu">'
                 . '<a href="' . route('show.loan', $user->id) . '" class="dropdown-item ajax-modal"><i class="ti-credit-card"></i> ' . __('Show Loan Detail') . '</a>'
-                . '<a href="' . route('form.loan', $user->id) . '"  class="dropdown-item ajax-modal"><i class="fa fa-notes"></i> ' . __('Download Loan form') . '</a></div>';
+                .$mes .'</div>';
         })
         ->setRowId(function ($user) {
             return "row_" . $user->id;
@@ -194,15 +196,17 @@ class LoanPlanController extends Controller
             return loan_status($user->status);
         })
         ->editColumn('member_names', function ($user) {
-            return ucwords($user->fullname_virtual);
+            return ucwords($user->user->fullname);
         })
         ->addColumn('action', function ($user) {
+
+            $mes = ($user->loan_type === 2 ) ? "":'<a href="' . route('form.loan', $user->id) . '"  class="dropdown-item "><i class="fa fa-notes"></i> ' . __('Download Loan form') . '</a>';
             return '<div class="dropdown text-center">'
                 . '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . __('Action')
                 . '&nbsp;</button>'
                 . '<div class="dropdown-menu">'
                 . '<a href="' . route('show.loan', $user->id) . '" class="dropdown-item ajax-modal"><i class="ti-credit-card"></i> ' . __('Show Loan Detail') . '</a>'
-                . '<a href="' . route('form.loan', $user->id) . '"  class="dropdown-item ajax-modal"><i class="fa fa-notes"></i> ' . __('Download Loan form') . '</a></div>';
+                . $mes.'</div>';
         })
         ->setRowId(function ($user) {
             return "row_" . $user->id;

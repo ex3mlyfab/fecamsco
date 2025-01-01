@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\ApplicationSettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoanPlanController;
@@ -126,6 +127,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/product-service/create', [ProductServiceController::class, 'invent'])->name('product.create')->can('create-product');
         Route::get('/product-service/sales', [ProductServiceController::class, 'sales'])->name('product.sales')->can('create-sales');
         Route::get('/product-service/{product}/details', [ProductServiceController::class, 'show'])->name('product.show')->can('view-product-detail');
+        Route::post('/supplier/get_table_data',[ProductServiceController::class, 'get_supplier_data'])->name('supplier.datatable');
         //purchase order
         Route::view('/purchase-order/create', 'shop.create-purchase-order')->name('purchase-order.ceate')->can('create-purchase-order');
         Route::view('/purchase-order', 'shop.list-purchase-order')->name('purchase-order.all')->can('create-purchase-order');
@@ -183,7 +185,10 @@ Route::middleware('auth')->group(function () {
         //Maual deposit
         Route::get('/manual-deposit/{user}', [MemberController::class, 'manualDeposit'])->name('deposit.manual')->can('manual-deposit');
     });
-
+    Route::prefix('analysis')->group(function () {
+        Route::get('/index', [AnalysisController::class, 'index'])->name('analysis.index');
+        Route::post('/analytical', [AnalysisController::class, 'depositAnalysis'])->name('analysis.deposit');
+    });
     Route::prefix('application')->group(function () {
         Route::get('/index', [ApplicationSettingController::class, 'index'])->name('application.index');
         Route::post('/storeSetting', [ApplicationSettingController::class, 'storeSetting'])->name('application.store');

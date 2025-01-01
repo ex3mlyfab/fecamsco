@@ -91,7 +91,7 @@
                         <div class="col-md-6">
                             <div class="icon bg-primary text-light">Amount applied for</div>
                                 <div>
-                                    <h5>{{ $loan->amount }}</h5>
+                                    <h5>{{ showAmountPer($loan->amount) }}</h5>
                                 </div>
                         </div>
                         <div class="col-md-6">
@@ -121,7 +121,7 @@
                     </div>
 
                     @if ($loan->loan_type == 2)
-                        @if ($loan->status==0 && $loan->loanProduct()->exists())
+                        @if (($loan->status==0 && $loan->loanProduct()->exists()) || $loan->status == 3)
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
@@ -137,8 +137,8 @@
                                             <td>{{$loop->index +1}}</td>
                                             <td>{{$loanProduct->productService->name}}</td>
                                             <td>{{$loanProduct->quantity}}</td>
-                                            <td>{{$loanProduct->selling_price}}</td>
-                                            <td>{{$loanProduct->quantity * $loanProduct->selling_price}}</td>
+                                            <td>{{showAmountPer($loanProduct->selling_price)}}</td>
+                                            <td>{{showAmountPer($loanProduct->quantity * $loanProduct->selling_price)}}</td>
                                         </tr>
                                         @empty
                                             <td colspan="5"><p>No Item to display</P></td>

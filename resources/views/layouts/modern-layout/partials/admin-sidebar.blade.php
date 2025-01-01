@@ -19,39 +19,8 @@
                     </li>
                     <li class="sidebar-main-title">
                         <div>
-                            <h6>Dashboard</h6>
+                            <h6>ADMINDashboard</h6>
                         </div>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/dashboard') }}" href="javascript:void(0)"><i
-                                data-feather="home"></i><span>Dashboard</span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/dashboard') }};">
-                            <li><a href="{{ route('home') }}" class="{{ routeActive('home') }}">Home</a></li>
-
-                            <li><a href="{{  auth()->user()->member_status ? route('self-update.create') : route('member-register')  }}"
-                                    class="{{ auth()->user()->member_status ? routeActive('self-update.create'):routeActive('member-register') }}">Membership</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/member-savings') }}" href="javascript:void(0)"><i
-                                data-feather="database"></i><span>Savings</span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/member-savings') }};">
-                            <li><a href="{{ route('self-deposit.all', auth()->user()->id) }}" class="{{ routeActive('self-deposit.all') }}">My Savings Details</a>
-                            </li>
-                            <li><a href="{{ route('contributions.update', auth()->user()->id) }}" class="{{ routeActive('contributions.update') }}">My Monthly  Contribution</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/member-loans') }}" href="javascript:void(0)"><i
-                                data-feather="credit-card"></i><span>Loans</span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/member-loans') }};">
-                            <li><a href="{{ route('self-loan.all', auth()->user()->id) }}" class="{{ routeActive('self-loan.all') }}">My Loan Details</a>
-                            </li>
-                            <li><a href="{{ route('self-loan.apply') }}" class="{{ routeActive('self-loan.apply') }}">Apply for Loan</a>
-                            </li>
-
-                        </ul>
                     </li>
                     @if (auth()->user()->roles()->exists())
 
@@ -160,7 +129,6 @@
                         <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/settings') }};">
                             <li><a href="{{ route('role.create') }}" class="{{ routeActive('role.create') }}">All
                                    Roles</a></li>
-                            <li><a href="{{ route('analysis.index') }}" class="{{ routeActive('analysis.index') }}">Analysis</a></li>
                             <li><a href="{{ route('permission.create') }}" class="{{ routeActive('permission.create') }}">Permissions</a></li>
                             <li><a href="{{ route('role.assign') }}" class="{{ routeActive('role.assign') }}">Assign Role to User</a></li>
                             <li><a href="{{ route('application.index') }}" class="{{ routeActive('application.index') }}">Application Settings</a></li>

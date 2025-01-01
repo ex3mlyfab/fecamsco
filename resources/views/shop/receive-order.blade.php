@@ -69,7 +69,7 @@
                                     <table class="display datatables" id="server-side-datatable">
                                         <thead>
                                             <tr>
-                                                <th>S/N</th>
+                                               
                                                 <th>Supplier</th>
                                                 <th>Total Cost</th>
                                                 <th>Received by</th>
@@ -80,7 +80,7 @@
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>S/N</th>
+                                               
                                                 <th>Supplier</th>
                                                 <th>Total Cost</th>
                                                 <th>Received by</th>
@@ -152,11 +152,7 @@
                         }
                     }),
                     "columns": [
-                        {
-                        "render": function(data, type, full, meta) {
-                            return i++;
-                        }
-                        },
+
                         {
                             data: "supplier_name",
                             name: "supplier.name"
@@ -180,6 +176,7 @@
                             name: "action"
                         },
                     ],
+
                     responsive: true,
                     "bStateSave": true,
                     "bAutoWidth": false,

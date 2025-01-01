@@ -30,12 +30,12 @@ class LoanRequestController extends Controller
             'product_price.*' => 'sometimes|numeric',
             'product_quantity.*' => 'sometimes|numeric',
             'select_line_total.*' => 'sometimes|numeric',
-            'witness_name' => 'required|array',
-            'witness_name.*' => 'sometimes|required|string',
-            'witness_department' => 'required|array',
-            'witness_department.*' => 'sometimes|required|string',
-            'witness_phone' => 'required|array',
-            'witness_phone.*' => 'sometimes|required|string'
+           'witness_name' => 'required_if:loan_type,Financial|array',
+            'witness_name.*' => 'nullable|string',
+            'witness_department' => 'required|array|required_if:loan_type,Financial',
+            'witness_department.*' => 'nullable|string',
+            'witness_phone' => 'array|required_if:loan_type,Financial',
+            'witness_phone.*' => 'nullable|string'
         ]);
 
         // dd($data);
@@ -51,6 +51,7 @@ class LoanRequestController extends Controller
             'is_disbursed' =>false,
 
         ]);
+        if($data['loan_type']== "Financial"){
         foreach ($data['witness_name'] as $key => $value) {
             $loan->guarantors()->create([
                 'name' => $data['witness_name'][$key],
@@ -59,6 +60,7 @@ class LoanRequestController extends Controller
                 'witness_accepts' => 1
             ]);
         }
+    }
        if(isset($data['account_number'])){
         $loan->loanBank()->create([
             'account_number' => $data['account_number'],
@@ -106,12 +108,12 @@ class LoanRequestController extends Controller
             'product_price.*' => 'sometimes|numeric',
             'product_quantity.*' => 'sometimes|numeric',
             'select_line_total.*' => 'sometimes|numeric',
-            'witness_name' => 'required|array',
-            'witness_name.*' => 'sometimes|required|string',
-            'witness_department' => 'required|array',
-            'witness_department.*' => 'sometimes|required|string',
-            'witness_phone' => 'required|array',
-            'witness_phone.*' => 'sometimes|required|string'
+            'witness_name' => 'required_if:loan_type,Financial|array',
+            'witness_name.*' => 'sometimes|string',
+            'witness_department' => 'required|array|required_if:loan_type,Financial',
+            'witness_department.*' => 'sometimes|string',
+            'witness_phone' => 'array|required_if:loan_type,Financial',
+            'witness_phone.*' => 'sometimes|string'
         ]);
 
         // dd($data);

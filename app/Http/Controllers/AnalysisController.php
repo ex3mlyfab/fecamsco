@@ -17,14 +17,17 @@ class AnalysisController extends Controller
     {
         $ctss_year = SavingUploadDetail::select(DB::raw('YEAR(deduction_period) as year'))->groupBy('year')->orderBy('year', 'desc')->get();
         $sale_year = Sale::select(DB::raw('YEAR(created_at) as year'))->groupBy('year')->orderBy('year', 'desc')->get();
-        $ctss_year = array_merge( $sale_year,$ctss_year);
+        $ctss_year = array_merge( $sale_year->toArray(),$ctss_year->toArray());
         return view('analysis.index', compact('ctss_year'));
     }
 
     public function depositAnalysis(Request $request)
     {
-
+        // dd($request);
         $deposits = SavingUploadDetail::whereYear('deduction_period', $request->year)->get();
+        foreach($deposits as $deposit){
+            
+        }
 
         $ctlsses = CtlsDetails::whereYear('deduction_period', $request->year)->get();
 
@@ -34,6 +37,7 @@ class AnalysisController extends Controller
                             ->get();
 
                         // Optional: Format the results for easier display
+
         foreach ($sales as $group) {
             $monthName = date('F', mktime(0, 0, 0, $group->month, 1));
             $group->month_name = $monthName;
